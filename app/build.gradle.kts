@@ -1,22 +1,29 @@
-plugins {
-    val kotlinVersion = "1.9.23"
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.spring") version kotlinVersion
-    id("org.springframework.boot") version "3.2.3"
-}
-
 group = "hu.kotlin.feladat.ms"
+
+plugins {
+    kotlin("jvm")
+    kotlin("plugin.spring")
+    id("org.springframework.boot")
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    val springCloudVersion: String by project
+    val mockitoVersion: String by project
+
     implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation(group = "org.springframework.boot", name = "spring-boot-starter-web")
+    implementation(group = "org.springframework.cloud", name = "spring-cloud-starter-openfeign", version = springCloudVersion)
+    implementation(group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin")
+
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-params")
+
     testImplementation(kotlin("test"))
-    testImplementation("io.mockk:mockk:1.4.1")
+    testImplementation(group = "org.mockito", name = "mockito-core", version = mockitoVersion)
+    testImplementation(group = "org.mockito", name = "mockito-junit-jupiter", version = mockitoVersion)
 }
 
 tasks.test {
